@@ -4,6 +4,9 @@
 
 unsigned int receiveddata;
 unsigned int secondPart;
+float pressure;
+float temp;
+unsigned int mask = 0x3fff;
 void setup() {
   Serial.begin(57600);
   SPI.begin();
@@ -19,6 +22,12 @@ void loop() {
   delay(100);
   Serial.println(String(receiveddata));
   Serial.println(secondPart);
+  secondPart = secondPart >> 5;
+  receiveddata &= mask;
+  temp = ((float)secondPart*200/2047) - 50;
+  pressure = ((float)receiveddata/(float)mask)*15;
+  Serial.println(pressure);
+  Serial.println(temp);
   digitalWrite(7,HIGH);
   delay(300);
   
